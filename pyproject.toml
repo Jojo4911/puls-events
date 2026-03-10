@@ -1,0 +1,7 @@
+[project]
+name = "puls-events"
+version = "0.1.0"
+description = "Plateforme de recommandations culturelles locales et personnalisées"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
