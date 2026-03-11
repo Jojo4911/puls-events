@@ -216,6 +216,25 @@ def clean_events(raw_events: list[dict]) -> pd.DataFrame:
     return df
 
 
+# --- Analyse des longueurs de textes pour l’embedding ---
+
+
+def analyze_text_lengths(df: pd.DataFrame) -> None:
+    """Affiche les statistiques de longueur du texte pour embedding."""
+    lengths = df["text_for_embedding"].str.len()
+
+    logger.info("=== Distribution des longueurs du texte pour embedding ===")
+    logger.info("Min: %d | Max: %d | Moyenne: %.0f | Médiane: %.0f",
+                lengths.min(), lengths.max(), lengths.mean(), lengths.median())
+
+    bins = [0, 200, 500, 1000, 2000, 5000, float("inf")]
+    labels = ["< 200", "200-500", "500-1000", "1000-2000", "2000-5000", "> 5000"]
+    counts = pd.cut(lengths, bins=bins, labels=labels).value_counts().sort_index()
+    for label, count in counts.items():
+        pct = count / len(df) * 100
+        logger.info("  %10s : %4d (%5.1f%%)", label, count, pct)
+
+
 # --- Sauvegarde ---
 
 
@@ -258,10 +277,13 @@ def main():
     # 2. Nettoyage et structuration
     df = clean_events(raw_events)
 
-    # 3. Sauvegarde
+    # 3. Analyse de la longueur des textes générés pour l’embedding
+    analyze_text_lengths(df)
+    
+    # 4. Sauvegarde
     save_events(df)
 
-    # 4. Résumé
+    # 5. Résumé
     logger.info("--- Résumé ---")
     logger.info("Événements bruts récupérés : %d", len(raw_events))
     logger.info("Événements nettoyés retenus : %d", len(df))
