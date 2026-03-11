@@ -60,7 +60,7 @@ def row_to_document(row: pd.Series) -> Document:
         metadata=metadata,
     )
 
-def dataframe_to_document(df: pd.DataFrame) -> list[Document]:
+def dataframe_to_documents(df: pd.DataFrame) -> list[Document]:
     """Convertit le DataFrame complet en liste de Documents LangChain."""
     df = df.fillna("") # Pour éviter les "NaN" dans le Json
     documents = []
@@ -175,7 +175,7 @@ def load_and_chunk(
     logger.info("Chargement des données depuis %s", csv_path)
     df = pd.read_csv(csv_path)
 
-    documents = dataframe_to_document(df)
+    documents = dataframe_to_documents(df)
     chunks = chunk_documents(documents, chunk_size, chunk_overlap)
 
     return chunks
