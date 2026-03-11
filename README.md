@@ -9,16 +9,17 @@ Le système repose sur une architecture **RAG (Retrieval-Augmented Generation)**
 - Un **LLM (Mistral / Gemini)** pour générer des réponses personnalisées et contextualisées
 - Une **API REST (FastAPI)** exposant le système pour une utilisation par les équipes métier
 
-L'objectif est de permettre à un utilisateur de poser une question en langage naturel (ex : *"Quels concerts ont lieu à Lyon ce week-end ?"*) et d'obtenir des recommandations pertinentes basées sur les données réelles d'événements.
+L'objectif est de permettre à un utilisateur de poser une question en langage naturel (ex : *"Quels concerts ont lieu dans la Drôme ce week-end ?"*) et d'obtenir des recommandations pertinentes basées sur les données réelles d'événements.
 
 ## Structure du projet
 
 ```
 puls-events/
 ├── src/                # Code source principal (ingestion, chunking, embeddings, RAG)
+│   └── ingestion.py    # Collecte et prétraitement des données Open Agenda
 ├── api/                # Endpoints FastAPI
 ├── tests/              # Tests unitaires et scripts de validation
-├── data/               # Données brutes et traitées (non versionnées)
+├── data/               # Données collectées et traitées
 ├── docs/               # Documentation technique et rapports
 ├── .env.example        # Template des variables d'environnement
 ├── .gitignore          # Fichiers et dossiers exclus du versionnement
@@ -49,8 +50,8 @@ uv sync
 git clone https://github.com/Jojo4911/puls-events.git
 cd puls-events
 python -m venv .venv
-source .venv/bin/activate   # Linux/macOS
-# .venv\Scripts\activate    # Windows
+# source .venv/bin/activate   # Linux/macOS
+.venv\Scripts\activate    # Windows
 pip install -r requirements.txt
 ```
 
@@ -80,6 +81,25 @@ python tests/test_imports.py
 
 Tous les tests doivent passer pour confirmer que l'environnement est correctement configuré.
 
+## Pipeline de données
+
+### Collecte et prétraitement
+
+Le script `src/ingestion.py` gère la collecte et le nettoyage des données en un seul pipeline :
+
+```bash
+uv run python src/ingestion.py
+```
+
+Ce script :
+1. **Récupère** les événements culturels du département de la Drôme via l'API Open Agenda (OpenDataSoft), avec pagination automatique
+2. **Filtre** les événements des 12 derniers mois
+3. **Nettoie** les données : suppression des balises HTML, déduplication, suppression des entrées vides
+4. **Structure** chaque événement en un texte formaté pour la vectorisation (titre, date, lieu, description, mots-clés)
+5. **Sauvegarde** le dataset nettoyé en JSON et CSV dans `data/`
+
+Les données pré-collectées sont disponibles dans le dossier `data/` pour une utilisation immédiate sans appel API.
+
 ## Technologies
 
 | Composant               | Technologie                  |
@@ -92,6 +112,7 @@ Tous les tests doivent passer pour confirmer que l'environnement est correctemen
 | Évaluation              | Ragas                        |
 | Conteneurisation        | Docker                       |
 | Gestion des dépendances | UV                           |
+| Source de données       | Open Agenda (OpenDataSoft)   |
 
 ## Licence
 
