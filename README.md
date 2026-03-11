@@ -15,11 +15,12 @@ L'objectif est de permettre à un utilisateur de poser une question en langage n
 
 ```
 puls-events/
-├── src/                # Code source principal (ingestion, chunking, embeddings, RAG)
-│   └── ingestion.py    # Collecte et prétraitement des données Open Agenda
+├── src/                # Code source principal
+│   ├── ingestion.py    # Collecte et prétraitement des données Open Agenda
+│   └── chunking.py     # Découpage des documents pour la vectorisation
 ├── api/                # Endpoints FastAPI
 ├── tests/              # Tests unitaires et scripts de validation
-├── data/               # Données collectées et traitées
+├── data/               # Données collectées, traitées et chunkées
 ├── docs/               # Documentation technique et rapports
 ├── .env.example        # Template des variables d'environnement
 ├── .gitignore          # Fichiers et dossiers exclus du versionnement
@@ -50,8 +51,8 @@ uv sync
 git clone https://github.com/Jojo4911/puls-events.git
 cd puls-events
 python -m venv .venv
-# source .venv/bin/activate   # Linux/macOS
-.venv\Scripts\activate    # Windows
+source .venv/bin/activate   # Linux/macOS
+# .venv\Scripts\activate    # Windows
 pip install -r requirements.txt
 ```
 
@@ -83,7 +84,7 @@ Tous les tests doivent passer pour confirmer que l'environnement est correctemen
 
 ## Pipeline de données
 
-### Collecte et prétraitement
+### 1. Collecte et prétraitement
 
 Le script `src/ingestion.py` gère la collecte et le nettoyage des données en un seul pipeline :
 
@@ -98,7 +99,29 @@ Ce script :
 4. **Structure** chaque événement en un texte formaté pour la vectorisation (titre, date, lieu, description, mots-clés)
 5. **Sauvegarde** le dataset nettoyé en JSON et CSV dans `data/`
 
-Les données pré-collectées sont disponibles dans le dossier `data/` pour une utilisation immédiate sans appel API.
+### 2. Chunking
+
+Le script `src/chunking.py` découpe les documents pour la vectorisation :
+
+```bash
+uv run python src/chunking.py
+```
+
+Ce script :
+1. **Convertit** chaque événement en objet Document LangChain avec métadonnées (titre, date, lieu, URL)
+2. **Découpe** les textes longs via `RecursiveCharacterTextSplitter` (chunk_size=1000, overlap=150)
+3. **Propage** les métadonnées de l'événement source à chaque chunk
+4. **Sauvegarde** les chunks en JSON dans `data/`
+
+Stratégie de chunking : l'analyse de la distribution des longueurs a montré que 85% des textes font moins de 1000 caractères. Le `chunk_size` de 1000 préserve l'intégrité de la majorité des événements tout en découpant les 15% restants en 2-3 chunks avec chevauchement.
+
+Les données pré-collectées et pré-chunkées sont disponibles dans le dossier `data/` pour une utilisation immédiate sans appel API.
+
+### Tests
+
+```bash
+uv run pytest tests/ -v
+```
 
 ## Technologies
 
