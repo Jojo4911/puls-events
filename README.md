@@ -15,18 +15,26 @@ L'objectif est de permettre à un utilisateur de poser une question en langage n
 
 ```
 puls-events/
-├── src/                # Code source principal
-│   ├── ingestion.py    # Collecte et prétraitement des données Open Agenda
-│   └── chunking.py     # Découpage des documents pour la vectorisation
-├── api/                # Endpoints FastAPI
-├── tests/              # Tests unitaires et scripts de validation
-├── data/               # Données collectées, traitées et chunkées
-├── docs/               # Documentation technique et rapports
-├── .env.example        # Template des variables d'environnement
-├── .gitignore          # Fichiers et dossiers exclus du versionnement
-├── pyproject.toml      # Configuration du projet et dépendances (UV)
-├── uv.lock             # Verrouillage des versions exactes des dépendances
-├── requirements.txt    # Dépendances (généré depuis uv.lock pour compatibilité pip)
+├── src/                    # Code source principal
+│   ├── __init__.py         # Package Python
+│   ├── ingestion.py        # Collecte et prétraitement des données Open Agenda
+│   ├── chunking.py         # Découpage des documents pour la vectorisation
+│   ├── vectorstore.py      # Embeddings, index FAISS (build/save/load/search)
+│   └── build_index.py      # Script de construction/reprise de l'index FAISS
+├── api/                    # Endpoints FastAPI
+├── tests/                  # Tests unitaires et scripts de validation
+│   ├── test_imports.py     # Validation des imports clés
+│   ├── test_ingestion.py   # Tests du pipeline de collecte (33 tests)
+│   ├── test_chunking.py    # Tests du chunking
+│   └── test_vectorstore.py # Tests de l'index FAISS et des embeddings (14 tests)
+├── data/                   # Données collectées, traitées et chunkées
+├── faiss_index/            # Index FAISS sauvegardé (généré, non versionné)
+├── docs/                   # Documentation technique et rapports
+├── .env.example            # Template des variables d'environnement
+├── .gitignore              # Fichiers et dossiers exclus du versionnement
+├── pyproject.toml          # Configuration du projet et dépendances (UV)
+├── uv.lock                 # Verrouillage des versions exactes des dépendances
+├── requirements.txt        # Dépendances (généré depuis uv.lock pour compatibilité pip)
 └── README.md
 ```
 
@@ -66,18 +74,17 @@ cp .env.example .env
 
 Variables à configurer dans `.env` :
 
-| Variable              | Description                        |
-|-----------------------|------------------------------------|
-| `MISTRAL_API_KEY`     | Clé API Mistral                    |
-| `GOOGLE_API_KEY`      | Clé API Google Gemini (fallback)   |
-| `OPENAGENDA_API_KEY`  | Clé API Open Agenda                |
+| Variable              | Description                                          |
+|-----------------------|------------------------------------------------------|
+| `MISTRAL_API_KEY`     | Clé API Mistral                                      |
+| `GOOGLE_API_KEY`      | Clé API Google Gemini                                |
+| `OPENAGENDA_API_KEY`  | Clé API Open Agenda                                  |
+| `EMBEDDING_PROVIDER`  | Provider d'embeddings : `mistral` ou `google`        |
 
 ### Vérification de l'environnement
 
 ```bash
-uv run python tests/test_imports.py
-# ou
-python tests/test_imports.py
+uv run pytest tests/ -v
 ```
 
 Tous les tests doivent passer pour confirmer que l'environnement est correctement configuré.
@@ -117,6 +124,31 @@ Stratégie de chunking : l'analyse de la distribution des longueurs a montré qu
 
 Les données pré-collectées et pré-chunkées sont disponibles dans le dossier `data/` pour une utilisation immédiate sans appel API.
 
+### 3. Vectorisation et index FAISS
+
+Le module `src/vectorstore.py` gère les embeddings et l'index FAISS. Le script `src/build_index.py` orchestre la construction complète :
+
+```bash
+# Construction complète de l'index
+uv run python -m src.build_index
+
+# Construction partielle (ex : 900 premiers chunks, utile pour gérer les quotas API de google)
+uv run python -m src.build_index 900
+
+# Reprise d'un index partiel (ajoute automatiquement les chunks manquants)
+uv run python -m src.build_index --resume
+```
+
+Ce pipeline :
+1. **Charge** les chunks depuis le CSV nettoyé
+2. **Vectorise** chaque chunk via l'API d'embeddings (Mistral ou Google selon `EMBEDDING_PROVIDER`)
+3. **Indexe** les vecteurs dans FAISS avec conservation des métadonnées
+4. **Sauvegarde** l'index sur disque dans `faiss_index/`
+
+L'architecture supporte le switch entre providers d'embeddings via la variable `EMBEDDING_PROVIDER`. Pour le provider Google, les embeddings sont optimisés par type de tâche : `RETRIEVAL_DOCUMENT` à l'indexation et `RETRIEVAL_QUERY` à la recherche, ce qui améliore la pertinence des résultats.
+
+**Note sur le choix du modèle d'embedding :** le modèle cible est Mistral (`mistral-embed`), conformément aux exigences du projet. En raison d'un problème d'accès à l'API Mistral (ticket de support ouvert, non résolu au moment du développement), le modèle Google `gemini-embedding-001` est utilisé en fallback. L'architecture permet de switcher entre les deux providers sans modification de code.
+
 ### Tests
 
 ```bash
@@ -125,17 +157,17 @@ uv run pytest tests/ -v
 
 ## Technologies
 
-| Composant               | Technologie                  |
-|-------------------------|------------------------------|
-| Orchestration RAG       | LangChain                    |
-| Base vectorielle        | FAISS (faiss-cpu)            |
-| LLM                     | Mistral AI / Google Gemini   |
-| Embeddings              | Mistral Embed / HuggingFace  |
-| API                     | FastAPI + Uvicorn            |
-| Évaluation              | Ragas                        |
-| Conteneurisation        | Docker                       |
-| Gestion des dépendances | UV                           |
-| Source de données       | Open Agenda (OpenDataSoft)   |
+| Composant               | Technologie                                |
+|-------------------------|--------------------------------------------|
+| Orchestration RAG       | LangChain                                  |
+| Base vectorielle        | FAISS (faiss-cpu)                          |
+| LLM                     | Mistral AI / Google Gemini (switchable)    |
+| Embeddings              | Mistral Embed / Google Gemini (switchable) |
+| API                     | FastAPI + Uvicorn                          |
+| Évaluation              | Ragas                                      |
+| Conteneurisation        | Docker                                     |
+| Gestion des dépendances | UV                                         |
+| Source de données       | Open Agenda (OpenDataSoft)                 |
 
 ## Licence
 
