@@ -89,7 +89,7 @@ class RAGSystem:
         Args:
             k: Nombre de documents à récupérer par requête.
         """
-        logger.infop("Initialisation du RAGSystem...")
+        logger.info("Initialisation du RAGSystem...")
 
         # 1. Chargement de l'index FAISS
         self.vectorstore = load_index()
