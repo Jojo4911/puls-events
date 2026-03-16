@@ -29,7 +29,7 @@ def test_langchain_google():
     print("langchain-google-geain OK (fallback Gemini)")
 
 def test_ragas():
-    from ragas.metrics import faithfulness, answer_relevancy
+    from ragas.metrics.collections import faithfulness, answer_relevancy
     print("ragas OK")
 
 def test_fastapi():
@@ -58,4 +58,5 @@ if __name__ == "__main__":
             print(f"{test.__name__} FAILED: {e}")
             failed += 1
 
-print(f"\nResultat: {passed} passed, {failed} failed")
+if __name__ == "__main__":
+    print(f"\nResultat: {passed} passed, {failed} failed")

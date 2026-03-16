@@ -29,7 +29,7 @@ def main():
 
         for i, doc in enumerate(results, 1):
             meta = doc.metadata
-            print(f"\n --- Résultats {1}---")
+            print(f"\n --- Résultats {i}---")
             print(f"  Titre : {meta.get('title', 'N/A')}")
             print(f"  Lieu  : {meta.get('location_naem', 'N/A')} — {meta.get('location_city', 'N/A')}")
             print(f"  Dates : {meta.get('first_date', '?')} → {meta.get('last_date', '?')}")
