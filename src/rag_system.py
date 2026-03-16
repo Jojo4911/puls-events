@@ -12,10 +12,10 @@ Utilise LCEL (LangChain Expression Language) pour assembler la chaîne.
 
 # --- Imports ---
 import logging
+from datetime import date
 
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
 
 from src.vectorstore import load_index
 from src.llm import get_llm, extract_text
@@ -31,9 +31,11 @@ Tu aides les utilisateurs à trouver des événements (concerts, expositions, sp
 Règles :
 - Réponds en français.
 - Base ta réponse exclusivement sur les documents fournis.
-- Si la réponse n'est pas dans les documents, dis-le clairement.
+- Si la réponse n'est pas dans les documents, dis-le clairement, mais propose des alternatives proches (lieu ou thème).
 - N'invente jamais d'événements qui n'apparaît pas dans les documents.
 - Cite le titre, le lieu et les dates des événements que tu mentionnes.
+- Prends en compte la date d'aujourd'hui : {today_date}. Si l'utilisateur y fait référence (par exemple "Cette semaine", ou "ce week-end"), privilégie des évènements actuels ou futurs à cette date.
+- Signale si un évènement est passé par rapport à {today_date}.
 
 --- Documents ---
 {context}
@@ -50,7 +52,7 @@ def format_docs(docs: list[Document]) -> str:
     Chaque document inclut ses métadonnées clés (titre, lieu, dates)
     pour aider le LLM à formuler des réponses précises.
     """
-    formated = []
+    formatted = []
     for i, doc in enumerate(docs, 1):
         meta = doc.metadata
         header = (
@@ -60,9 +62,50 @@ def format_docs(docs: list[Document]) -> str:
             f"Dates : {meta.get('date_display', 'N/A')}\n"
             f"Contenu : {doc.page_content}"
         )
-        formated.append(header)
+        formatted.append(header)
 
-    return "\n\n".join(formated)
+    return "\n\n".join(formatted)
+
+
+def format_date_fr(d: date) -> str:
+    """
+    Formate une date donnée par l'objet date en une date en texte naturel en français.
+
+    "2026-03-16" → "lundi 16 mars 2026"
+
+    Args:
+        d: Date retournée par le module datetime.
+
+    Returns:
+        str: Date plus naturelle en français.
+    """
+    days_fr = {
+        0: "lundi",
+        1: "mardi",
+        2: "mercredi",
+        3: "jeudi",
+        4: "vendredi",
+        5: "samedi",
+        6: "dimanche",
+        }
+
+    months_fr = {
+        1: "janvier",
+        2: "février",
+        3: "mars",
+        4: "avril",
+        5: "mai",
+        6: "juin",
+        7: "juillet",
+        8: "août",
+        9: "septembre",
+        10: "octobre",
+        11: "novembre",
+        12: "décembre",
+        }
+
+    return f"{days_fr[d.weekday()]} {d.day} {months_fr[d.month]} {d.year}"
+
 
 
 # --- Classe RAGSystem ---
@@ -82,7 +125,7 @@ class RAGSystem:
         prompt: Template du prompt RAG.
     """
 
-    def __init__(self, k: int = 5):
+    def __init__(self, k: int = 10):
         """
         Initialise le système RAG.
 
@@ -132,16 +175,20 @@ class RAGSystem:
         # 2. Augmentation — construction du prompt avec le contexte
         context = format_docs(docs)
 
-        # 3. Génération — invocation de la chaîne de prompt → LLM
+        # 3. Augmentation — récupération de la date du jour en chaîne de caractères
+        today_date = format_date_fr(date.today())
+
+        # 4. Génération — invocation de la chaîne de prompt → LLM
         chain = self.prompt | self.llm
         response = chain.invoke({
+            "today_date": today_date,
             "context": context,
             "question": question,
         })
 
         answer = extract_text(response)
 
-        # 4. Extraction des sources (métadonnées des documents)
+        # 5. Extraction des sources (métadonnées des documents)
         sources = [
             {
                 "title": doc.metadata.get("title", "N/A"),
