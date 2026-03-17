@@ -12,7 +12,8 @@ Utilise LCEL (LangChain Expression Language) pour assembler la chaîne.
 
 # --- Imports ---
 import logging
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
@@ -59,52 +60,54 @@ def format_docs(docs: list[Document]) -> str:
             f"[Document {i}]\n"
             f"Titre : {meta.get('title', 'N/A')}\n"
             f"Lieu : {meta.get('location_name', 'N/A')} — {meta.get('location_city', 'N/A')}\n"
-            f"Dates : {meta.get('date_display', 'N/A')}\n"
+            f"Dates : Du {format_datetime_fr(meta.get('first_date', 'N/A'))}, au {format_datetime_fr(meta.get('last_date', 'N/A'))}\n"
             f"Contenu : {doc.page_content}"
         )
         formatted.append(header)
 
     return "\n\n".join(formatted)
 
+DAYS_FR = {
+    0: "lundi",
+    1: "mardi",
+    2: "mercredi",
+    3: "jeudi",
+    4: "vendredi",
+    5: "samedi",
+    6: "dimanche",
+    }
 
-def format_date_fr(d: date) -> str:
+MONTHS_FR = {
+    1: "janvier",
+    2: "février",
+    3: "mars",
+    4: "avril",
+    5: "mai",
+    6: "juin",
+    7: "juillet",
+    8: "août",
+    9: "septembre",
+    10: "octobre",
+    11: "novembre",
+    12: "décembre",
+    }
+
+def format_datetime_fr(d: str) -> str:
     """
-    Formate une date donnée par l'objet date en une date en texte naturel en français.
+    Formate une date et heure (au format texte issu de datetime) en texte naturel en français, au fuseau horaire de Paris.
 
-    "2026-03-16" → "lundi 16 mars 2026"
+    "2025-09-20T08:00:00+00:00" → "samedi 20 septembre 2025 à 10h00"
 
     Args:
-        d: Date retournée par le module datetime.
+        d: Date et heure au format texte issu de datetime.
 
     Returns:
-        str: Date plus naturelle en français.
+        result: Texte de la date en français naturel.
     """
-    days_fr = {
-        0: "lundi",
-        1: "mardi",
-        2: "mercredi",
-        3: "jeudi",
-        4: "vendredi",
-        5: "samedi",
-        6: "dimanche",
-        }
-
-    months_fr = {
-        1: "janvier",
-        2: "février",
-        3: "mars",
-        4: "avril",
-        5: "mai",
-        6: "juin",
-        7: "juillet",
-        8: "août",
-        9: "septembre",
-        10: "octobre",
-        11: "novembre",
-        12: "décembre",
-        }
-
-    return f"{days_fr[d.weekday()]} {d.day} {months_fr[d.month]} {d.year}"
+    
+    date_iso = datetime.fromisoformat(d).astimezone(tz=ZoneInfo("Europe/Paris"))
+    result = f"{DAYS_FR[date_iso.weekday()]} {date_iso.day} {MONTHS_FR[date_iso.month]} {date_iso.year} à {date_iso.hour}h{date_iso.minute:02d}"
+    return result
 
 
 
@@ -176,7 +179,7 @@ class RAGSystem:
         context = format_docs(docs)
 
         # 3. Augmentation — récupération de la date du jour en chaîne de caractères
-        today_date = format_date_fr(date.today())
+        today_date = str(datetime.now(tz=ZoneInfo("Europe/Paris")))
 
         # 4. Génération — invocation de la chaîne de prompt → LLM
         chain = self.prompt | self.llm
@@ -194,7 +197,7 @@ class RAGSystem:
                 "title": doc.metadata.get("title", "N/A"),
                 "location_name": doc.metadata.get("location_name", "N/A"),
                 "location_city": doc.metadata.get("location_city", "N/A"),
-                "date_display": doc.metadata.get("date_display", "N/A"),
+                "date_display": f'Du {format_datetime_fr(doc.metadata.get("first_date", "N/A"))}, au {format_datetime_fr(doc.metadata.get("last_date", "N/A"))}',
                 "url": doc.metadata.get("url", ""),
             }
             for doc in docs
@@ -220,11 +223,13 @@ if __name__ == "__main__":
 
     rag = RAGSystem()
 
-    test_questions = [
-        "Y a-t-il un concert de jazz à Valence ?",
-        "Quels spectacles pour enfants à Montélimar ?",
-        "Que faire ce week-end dans la Drôme ?",
-    ]
+    #test_questions = [
+    #    "Y a-t-il un concert de jazz à Valence ?",
+    #    "Quels spectacles pour enfants à Montélimar ?",
+    #    "Que faire ce week-end dans la Drôme ?",
+    #]
+
+    test_questions = ["Quel était le score de la finale de la coupe de france de Foot joué à Valence en Juillet 2025 ?"]
 
     for question in test_questions:
         print(f"\n{'=' * 60}")
