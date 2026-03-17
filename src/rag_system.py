@@ -223,13 +223,11 @@ if __name__ == "__main__":
 
     rag = RAGSystem()
 
-    #test_questions = [
-    #    "Y a-t-il un concert de jazz à Valence ?",
-    #    "Quels spectacles pour enfants à Montélimar ?",
-    #    "Que faire ce week-end dans la Drôme ?",
-    #]
-
-    test_questions = ["Quel était le score de la finale de la coupe de france de Foot joué à Valence en Juillet 2025 ?"]
+    test_questions = [
+        "Y a-t-il un concert de jazz à Valence ?",
+        "Quels spectacles pour enfants à Montélimar ?",
+        "Que faire ce week-end dans la Drôme ?",
+    ]
 
     for question in test_questions:
         print(f"\n{'=' * 60}")

@@ -1,6 +1,6 @@
 # Notes
 
-## Tests de pertinence du rag_system
+## Tests de pertinence du rag_system (16/03/2026)
 
 commande lancée : `uv run python -m src.rag_system`
 
@@ -66,3 +66,11 @@ C'est la réponse la plus impressionnante. Le LLM fait un vrai travail de synth�
 Question 3 — "Ce week-end"
 Le LLM comprend qu'on est le 16 mars 2026, identifie correctement le week-end prochain, dit honnêtement qu'il n'y a rien, et propose des événements futurs classés par mois. La date injectée fonctionne parfaitement.
 Le passage de k=5 à k=10 combiné au nouveau prompt produit des réponses beaucoup plus riches. Les trois améliorations (date, alternatives, k augmenté) se renforcent mutuellement.
+
+## Écriture des 20 paires question/ground - test_dataset.json (17/03/2026)
+
+J’ai dû orienter mes questions pour que la date ne soit pas bloquante car une majorité des événements est passée.
+
+Le vectorstore actuel créé avec FAISS ne supporte pas le filtrage des dates (contrairement à Chroma ou Qdrant)
+
+Ground_truth très détaillés, à voir si ce n'est pas bloquant au moment de l'implémentation RAGAS.
