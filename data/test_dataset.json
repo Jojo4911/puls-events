@@ -1,0 +1,142 @@
+[
+  {
+    "question": "Trouve moi des événements sur le thème du vélo à Nyons",
+    "ground_truth": "Tous les événements listés ci-dessous se sont déroulés en 2025 et sont donc **passés**.\n\nVoici les événements sur le thème du vélo qui ont eu lieu à Nyons selon les documents fournis :\n\n*   **Mai à Vélo 2025**\n    *   Lieu : Communauté de Communes des Baronnies en Drôme Provençale, Nyons\n    *   Dates : Du 1er mai au 31 mai 2025\n*   **Les Panseurs à Vélo : Permanences ateliers d'auto réparation / bourse aux vélos / pièces détachées vélo**\n    *   Lieu : La maison des possibles, Nyons\n    *   Dates : Du 5 mai au 28 mai 2025\n*   **55e Cyclo-Balade Découverte**\n    *   Lieu : Office de tourisme, Nyons\n    *   Date : 13 mai 2025\n*   **Test de VAE et tricycles à la Foire Eco Biologique Naturellement !**\n    *   Lieu : Foire Eco-biologique, Promenade de la digue, Nyons\n    *   Dates : 17 et 18 mai 2025\n*   **Atelier réparation et parcours d'initiation vélo à la Foire Eco Biologique Naturellement !**\n    *   Lieu : Foire Eco-biologique, Promenade de la digue, Nyons\n    *   Dates : 17 et 18 mai 2025\n*   **Circuit découverte du Vélo Electrique de Randonnée**\n    *   Lieu : Le Camp de base, Nyons\n    *   Date : 24 mai 2025\n*   **Circuit découverte du GRAVEL Bike (musculaire)**\n    *   Lieu : Le Camp de base, Nyons\n    *   Date : 25 mai 2025\n*   **Vélo pour Tous**\n    *   Lieu : Communauté de Communes des Baronnies en Drôme Provençale, Nyons\n    *   Dates : Du 1er mai au 2 juin 2025\n*   **Apéro Vélo chez Bivouak avec la CCBDP et Les Panseurs à Vélo**\n    *   Lieu : Bivouak, Nyons\n    *   Date : 6 juin 2025",
+    "answer": "",
+    "contexts": [],
+    "category": "croisé"
+  },
+  {
+    "question": "Trouve moi des événements à Saoû",
+    "ground_truth": "D'après les documents fournis, voici les événements qui ont eu lieu ou étaient prévus à Saoû :\n\n*   **Découvrez le jardinage au naturel lors d'un atelier gratuit**\n    *   **Lieu :** Jardin partagé, Saoû\n    *   **Date :** 19 avril 2025\n    *   *Note : Cet événement est passé.*\n\n*   **Concert 'Building'**\n    *   **Lieu :** École de Saoû, Route de la forêt, 26400 Saoû\n    *   **Date :** 6 juillet 2025\n    *   *Note : Cet événement est passé.*\n\n*   **L'Auberge des Dauphins - maison des sites naturels de la Drôme**\n    *   **Lieu :** Auberge des dauphins, Forêt de Saoû, 26400 Saoû\n    *   **Dates :** 20 et 21 septembre 2025\n    *   *Note : Cet événement est passé.*\n\n*   **Visite guidée : 1930-2020 : évolution architecturale d'une folie en forêt**\n    *   **Lieu :** Auberge des dauphins, Forêt de Saoû, 26400 Saoû\n    *   **Dates :** 20 et 21 septembre 2025\n    *   *Note : Cet événement est passé.*\n\nIl n'y a actuellement aucun événement futur répertorié à Saoû dans les documents fournis. Tous les événements listés pour cette commune ont déjà eu lieu en 2025.",
+    "answer": "",
+    "contexts": [],
+    "category": "lieu"
+  },
+  {
+    "question": "Est-ce qu'il y a eu des événements aux Pilles ?",
+    "ground_truth": "Oui, un événement a eu lieu aux Pilles, mais il est désormais passé par rapport à la date d'aujourd'hui.\n\nVoici les détails de cet événement :\n*   **Titre :** Au marché des Pilles à vélo avec la CCBDP et Dromolib\n*   **Lieu :** Les Pilles\n*   **Date :** 19 mai 2025\n\nCet événement est donc terminé. Si vous recherchez des activités culturelles ou des sorties dans la Drôme, n'hésitez pas à me demander si vous souhaitez des informations sur d'autres lieux ou thématiques présents dans mes documents.",
+    "answer": "",
+    "contexts": [],
+    "category": "lieu"
+  },
+  {
+    "question": "Trouve moi des événements à Dieulefit",
+    "ground_truth": "D'après les documents fournis, tous les événements listés à Dieulefit ont eu lieu en septembre 2025. Par conséquent, ils sont **tous passés** par rapport à la date d'aujourd'hui (17 mars 2026).\n\nVoici les événements qui étaient organisés à Dieulefit :\n\n*   **Randonnée céramique de Dieulefit au Poët-Laval**\n    *   Lieu : Parking des Vitrouillères, Dieulefit\n    *   Date : 20 septembre 2025\n*   **Parcours Céramique**\n    *   Lieu : Maison de la Céramique, Dieulefit\n    *   Dates : 20 et 21 septembre 2025\n*   **Au-delà des pierres, l'âme des plans : le patrimoine architectural se révèle.**\n    *   Lieu : Archives communales de Dieulefit\n    *   Date : 20 septembre 2025\n*   **L'église Saint Pierre et la Viale de Dieulefit, centre ancien**\n    *   Lieu : Église Saint-Pierre (vieille), Dieulefit\n    *   Date : 21 septembre 2025\n*   **Visite guidée des cimetières de Dieulefit**\n    *   Lieu : Cimetière de Dieulefit\n    *   Date : 18 mai 2025",
+    "answer": "",
+    "contexts": [],
+    "category": "lieu"
+  },
+  {
+    "question": "Trouve moi tous les événements reliés à la récupération et au recyclage à Crest.",
+    "ground_truth": "Voici les événements liés à la récupération et au recyclage à Crest, basés sur les documents fournis :\n\n*   **Fête de la récup, de la réparation et du recyclage**\n    *   **Lieu :** L'Or des Bennes, Crest\n    *   **Date :** 18 octobre 2025\n    *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*\n\n*   **Portes ouvertes : découverte du monde de la récup'**\n    *   **Lieu :** L'or des bennes recyclerie, 85 chemin du Grand-Saint-Jean, Crest\n    *   **Dates :** Du 22 au 29 novembre 2025\n    *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*\n\n*   **Atelier Réparation**\n    *   **Lieu :** 8 fablab, 3 rue Courre Commere, Crest\n    *   **Dates :** Du 12 juin 2025 au 11 décembre 2025 (certains jeudis)\n    *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*",
+    "answer": "",
+    "contexts": [],
+    "category": "croisé"
+  },
+  {
+    "question": "Quels ont été les événements du 23 Août 2025 ?",
+    "ground_truth": "D'après les documents fournis, voici les événements qui ont eu lieu le samedi 23 août 2025 dans la Drôme :\n\n*   **Les racines profondes ne gèlent pas**\n    *   **Lieu :** Place du village de Beaumont en Diois — Beaumont-en-Diois\n    *   **Date :** Samedi 23 août 2025\n    *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*\n\n*   **Concert JM France - Pierre Blanche, Chat Noir**\n    *   **lieu :** Yelloh Village - Camping Les Ramières\n    *   **Date :** Samedi 23 août 2025\n    *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*",
+    "answer": "",
+    "contexts": [],
+    "category": "date"
+  },
+  {
+    "question": "Quels ont été les événements du 3 Mai 2025 ?",
+    "ground_truth": "D'après les documents fournis, voici les événements qui ont eu lieu le samedi 3 mai 2025 dans la Drôme :\n\n    *   **Bière - Crêpes and Gravel**\n        *   **Lieu :** Velo Gite Valence 11 allée des petits champs 26000 VALENCE\n        *   **Date :** Samedi 3 mai 2025\n        *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*\n\n    *   **Découvrez le jardinage au naturel lors d'un atelier gratuit**\n        *   **lieu :** Esplanade du 28-Juin-1944, Beaufort-sur-Gervanne\n        *   **Date :** Samedi 3 mai 2025\n        *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*\n\n    *   **Randonnée cyclotouriste : FETE DU VELO**\n        *   **lieu :** SALLE DES FETES - PLACE DE LA MAIRIE - PUY-SAINT-MARTIN\n        *   **Date :** Samedi 3 mai 2025\n        *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*\n    *   **fete du velo**\n        *   **lieu :** puy saint martin place de la mairie 26450\n        *   **Date :** Samedi 3 mai 2025\n        *   *Note : Cet événement est passé par rapport à la date d'aujourd'hui.*",
+    "answer": "",
+    "contexts": [],
+    "category": "date"
+  },
+  {
+    "question": "Que s'est t'il passé dans la Drôme pour la fête de la musique ?",
+    "ground_truth": "Pour la Fête de la musique 2025, plusieurs événements ont eu lieu dans la Drôme le samedi 21 juin 2025. Notez que ces événements sont désormais passés par rapport à la date d'aujourd'hui.\n\nVoici les célébrations qui étaient organisées :\n\n*   **À Montoison (Place des remparts) :**\n    *   **Titre :** Montoison fête la musique le 21 juin : Concert gratuit et animations\n    *   **Date :** 21 juin 2025\n    *   **Programme :** Spectacle de gym dansée, scène ouverte aux artistes locaux et concert Pop Rock du groupe « Black Velvet ».\n\n*   **À Loriol-sur-Drôme (Centre-ville) :**\n    *   **Titre :** Une place = un style de musique !\n    *   **Dates :** 21 et 22 juin 2025\n    *   **Programme :** La ville proposait des animations musicales sur plusieurs lieux :\n        *   Place de l'ancienne caserne des pompiers (karaoké avec Pauline, Alex et Denis Boum).\n        *   Place du Lavoir (The Human Jukebox et Kheops).\n        *   Place de l'Église (No Reason et Mapple Reed).\n        *   Parc Gaillard (Je S'appelle Groove et Street).\n        *   Place du Temple (Association « Actions & Jeunesse »).\n\n*   **À Rochefort-en-Valdaine (Place ombragée) :**\n    *   **Titre :** Openair SoundSystem à Rochefort en Valdaine\n    *   **Date :** 21 juin 2025\n    *   **Programme :** Une journée rythmée commençant par une playlist rock, suivie d'une ambiance soundsystem (reggae et dub) et se terminant par une soirée électro/techno.",
+    "answer": "",
+    "contexts": [],
+    "category": "date"
+  },
+  {
+    "question": "Combien y-a t'il eu d'événements le 24 mars 2025 ?",
+    "ground_truth": "D'après les documents fournis, il y a eu trois événements répertoriés le lundi 24 mars 2025 dans la Drôme :\n\n    *   **Titre :** Love Lies Bleeding - la séance maudite\n    *   **Lieu :** Cinéma Les Templiers, Montélimar\n    *   **Date :** 24 mars 2025\n\n    *   **Titre :** Business plan / prévisionnel, l'intérêt d'être accompagné\n    *   **Lieu :** France Travail 354 A avenue de Chabeuil 26000 Valence\n    *   **Date :** 24 mars 2025\n\n    *   **Titre :** Décrochez une Mission ! Rencontrez l'agence Proman interim !\n    *   **Lieu :** Agence Proman interim de Crest\n    *   **Date :** 24 mars 2025",
+    "answer": "",
+    "contexts": [],
+    "category": "date"
+  },
+  {
+    "question": "Trouve moi tous les événements en lien avec l'aviation",
+    "ground_truth": "D'après les documents fournis, voici les événements en lien avec l'aviation dans la Drôme :\n\n*   **Découverte du patrimoine aéronautique européen**\n    *   **Lieu :** Musée européen de l'aviation de chasse, Montélimar\n    *   **Dates :** Du 20 septembre 2025 à 14h00 au 21 septembre 2025 à 14h00\n    *   *Note : Cet événement est passé.*\n\n*   **Visite guidée de l'atelier de restauration des avions**\n    *   **Lieu :** Musée européen de l'aviation de chasse, Montélimar\n    *   **Dates :** Du 20 septembre 2025 à 14h30 au 21 septembre 2025 à 16h30\n    *   *Note : Cet événement est passé.*\n\n*   **Découvrez la fabrication d'un OV10 Bronco en bois à partir de matériels recyclés !**\n    *   **Lieu :** Musée Européen de l'Aviation de Chasse de Montélimar — Ancône\n    *   **Dates :** Du 20 septembre 2025 à 14h00 au 21 septembre 2025 à 14h00\n    *   *Note : Cet événement est passé.*\n\n*   **Envolez vous vers votre avenir : Rencontrez l'Armée de l'Air et de l'Espace !**\n    *   **Lieu :** Agence VALENCE VICTOR HUGO, Valence\n    *   **Date :** 20 janvier 2026 à 8h30\n    *   *Note : Cet événement est passé.",
+    "answer": "",
+    "contexts": [],
+    "category": "type"
+  },
+  {
+    "question": "Je m'intéresse à l'IA, trouve moi des événements passés ou futurs sur le sujet.",
+    "ground_truth": "Voici les événements liés à l'intelligence artificielle (IA) répertoriés dans les documents fournis, classés par ordre chronologique :\n\n### Événements passés\nTous les événements ci-dessous ont déjà eu lieu par rapport à la date d'aujourd'hui :\n\n*   **Café-outils #97 : Notebook LM, votre IA personnalisée**\n    *   **Lieu :** Le Moulin Digital, Alixan\n    *   **Date :** 6 juin 2025\n*   **Vos idées IA sur la table : un CTO et un stratège business pour les passer au crible, en direct.**\n    *   **Lieu :** Valence Romans Agglomération, Alixan\n    *   **Date :** 24 juin 2025\n*   **Les Jeudis de La Fabrique : Optimisez votre utilisation de ChatGPT !**\n    *   **Lieu :** Porte de Drômardèche, Saint-Vallier\n    *   **Date :** 10 avril 2025\n*   **Les Olympiades du numérique** (incluant des ateliers sur l'IA)\n    *   **Lieu :** LPO Algoud-Laffemas, Valence\n    *   **Date :** 27 novembre 2025\n*   **Tech Job Connect #3** (incluant des ateliers sur l'IA)\n    *   **Lieu :** Médiathèque François Mitterrand, Valence\n    *   **Date :** 26 janvier 2026\n*   **Décrypt'innov #2 : L'IA non générative**\n    *   **Lieu :** Le Moulin Digital, Alixan\n    *   **Date :** 6 février 2026",
+    "answer": "",
+    "contexts": [],
+    "category": "type"
+  },
+  {
+    "question": "Est-ce qu'il y a eu des événements en lien avec la robotique ?",
+    "ground_truth": "Oui, plusieurs événements mentionnés dans les documents ont abordé le thème de la robotique. Cependant, il est important de noter que tous ces événements sont désormais **passés** par rapport à la date d'aujourd'hui :\n\n*   **Tech Job Connect #3** : Cet événement proposait des ateliers animés par des professionnels, notamment sur la robotique.\n    *   **Lieu** : Médiathèque François Mitterrand — Valence\n    *   **Date** : 26 janvier 2026\n\n*   **L'industrie innovante à l'ESISAR** : Cet événement incluait des ateliers orchestrés par le club Robot de l'école.\n    *   **Lieu** : ESISAR — Valence\n    *   **Date** : 6 novembre 2025\n\n*   **VISITE ENTREPRISE INDUSTRIELLE** : Cette visite permettait de découvrir une entreprise utilisant des outils de robotique de pointe pour l'usinage de pièces.\n    *   **Lieu** : Malataverne - Agence MONTELIMAR — Malataverne\n    *   **Date** : 14 novembre 2025\n\nIl n'y a actuellement aucun événement futur ou en cours lié à la robotique dans les documents fournis.",
+    "answer": "",
+    "contexts": [],
+    "category": "type"
+  },
+  {
+    "question": "Trouve moi les meilleurs événements reliés aux voitures",
+    "ground_truth": "D'après les documents fournis, voici les événements liés au monde de l'automobile. Veuillez noter qu'ils sont tous **passés** par rapport à la date d'aujourd'hui :\n\n*   **Visite de la Station-Service Vintage N7 et de son musée, exposition de véhicules anciens et balade nostalgique**\n    *   **Lieu :** Station d'Étoile, Étoile-sur-Rhône\n    *   **Dates :** 20 et 21 septembre 2025\n    *   **Description :** Exposition de véhicules anciens et de véhicules pompiers, visite d'une station-service vintage et balade sur la Nationale 7.\n*   **Visite d'une usine de recyclage automobile**\n    *   **Lieu :** GPA, Livron-sur-Drôme\n    *   **Date :** 21 novembre 2025\n    *   **Description :** Immersion au cœur du recyclage automobile et découverte de la production de pièces d'occasion.\n\n*   **Découverte du patrimoine aéronautique européen** (Alternative proche)\n    *   **Lieu :** Musée européen de l'aviation de chasse, Montélimar\n    *   **Dates :** 20 et 21 septembre 2025\n    *   **Description :** Bien qu'il s'agisse d'aéronautique, cet événement propose, comme pour les expositions automobiles, une découverte technique de matériels (moteurs, radars, modèles réduits).\n\nIl n'y a actuellement aucun événement automobile à venir dans les documents fournis.",
+    "answer": "",
+    "contexts": [],
+    "category": "type"
+  },
+  {
+    "question": "Je cherche des événements futurs ou passés sur le thème du jardinage à Valence",
+    "ground_truth": "Voici les événements liés au jardinage et aux parcs à Valence, classés selon leur date par rapport à aujourd'hui :\n\n### Événements à venir\n*   **L'ART DES JARDINS AU PARC JOUVET**\n    *   **Lieu :** Parc Jouvet, Valence\n    *   **Date :** Samedi 6 juin 2026 à 14h30\n    *   *Description :* Visite accompagnée d'une guide paysagiste pour découvrir la composition, les ensembles arboricoles et les arrangements floraux du parc.\n\n### Événements passés\nTous les autres événements répertoriés dans les documents concernant Valence sont antérieurs à la date d'aujourd'hui :\n\n*   **Trame verte urbaine et animations au Jardin Colibri**\n    *   **Lieu :** Jardin Le Colibri, Valence\n    *   **Date :** Dimanche 8 juin 2025 à 10h00\n*   **L'art des jardins au parc Jouvet**\n    *   **Lieu :** Parc Jouvet, Valence\n    *   **Date :** Dimanche 8 juin 2025 à 14h30\n*   **Visite guidée du parc Jouvet**\n    *   **Lieu :** Parc Jouvet, Valence\n    *   **Dates :** 20 et 21 septembre 2025\n*   **A la découverte de la faune et de la flore des canaux et zones humides de Valence**\n    *   **Lieu :** Parc de la Marquise, Valence\n    *   **Dates :** 20 et 21 septembre 2025",
+    "answer": "",
+    "contexts": [],
+    "category": "croisé"
+  },
+  {
+    "question": "Je cherche à trouver un job à Crest en Octobre 2025",
+    "ground_truth": "Pour le mois d'octobre 2025 à Crest, les événements suivants étaient organisés pour vous aider dans votre recherche d'emploi. Veuillez noter que ces événements sont désormais **passés** par rapport à la date d'aujourd'hui :\n\n*   **Décrochez une Mission ! Rencontrez l'agence Manpower et un conseiller entreprise de France Travail**\n    *   Lieu : Agence CREST, Crest\n    *   Date : Mardi 7 octobre 2025\n\n*   **Décrochez une Mission ! Rencontrez l'agence Menway et un conseiller entreprise de France Travail**\n    *   Lieu : Agence CREST, Crest\n    *   Date : Mardi 14 octobre 2025\n\n*   **Décrochez une Mission ! Rencontrez l'agence Adecco et un conseiller entreprise de France Travail**\n    *   Lieu : Agence CREST, Crest\n    *   Date : Mardi 21 octobre 2025\n\n*   **Décrochez une Mission ! Rencontrez sans RDV l'agence Randstad et un conseiller entreprise de France Travail**\n    *   Lieu : Agence CREST, Crest\n    *   Dates : Mardi 28 octobre 2025 (deux sessions mentionnées, à 7h00 et 8h00)\n\nIl n'y a pas d'autres événements de recrutement listés dans les documents fournis pour le mois d'octobre 2025.",
+    "answer": "",
+    "contexts": [],
+    "category": "croisé"
+  },
+  {
+    "question": "Quel temps fait-il à Montélimar ?",
+    "ground_truth": "Je suis désolé, mais les documents fournis ne contiennent aucune information concernant la météo à Montélimar.\n\nSi vous recherchez des activités culturelles, je peux vous aider à trouver des événements passés ou futurs répertoriés dans mes documents (expositions, visites de monuments, forums, etc.). Souhaitez-vous que je vous propose une sélection d'événements basés sur ces documents ?",
+    "answer": "",
+    "contexts": [],
+    "category": "hors_périmètre"
+  },
+  {
+    "question": "Quelle est la plus grande ville de la Drôme en population ?",
+    "ground_truth": "D'après les documents fournis, je ne dispose pas d'informations concernant la population des villes de la Drôme, et je ne peux donc pas déterminer laquelle est la plus grande.\n\nCependant, les documents mentionnent plusieurs événements culturels situés dans les principales villes du département, comme **Valence** et **Romans-sur-Isère**. Si vous cherchez des idées de sorties dans ces secteurs, je peux vous aider à consulter les événements listés dans ma base de données.",
+    "answer": "",
+    "contexts": [],
+    "category": "hors_périmètre"
+  },
+  {
+    "question": "Combien y a t'il de 'r' dans le mot 'strawberry' ?'",
+    "ground_truth": "La réponse à votre question ne figure pas dans les documents fournis, qui sont exclusivement consacrés aux événements culturels et professionnels dans la Drôme.\n\nPar conséquent, je ne peux pas répondre à cette question. Si vous avez des interrogations concernant les événements listés dans les documents (ateliers, recrutements, inaugurations), n'hésitez pas à me les poser !",
+    "answer": "",
+    "contexts": [],
+    "category": "hors_périmètre"
+  },
+  {
+    "question": "Trouve moi tous les concerts de Jazz de 2022",
+    "ground_truth": "D'après les documents fournis, je ne trouve aucun concert de Jazz programmé en 2022.\n\nTous les événements mentionnés dans les documents se déroulent sur l'année 2025 ou s'étendent jusqu'en 2026. Par ailleurs, concernant le genre 'Jazz', seul l'événement suivant en fait mention :\n\n*   **Découverte musicale et historique de Châteauneuf-de-Mazenc** (Foyer International d'Études Françaises, La Bégude-de-Mazenc) : Le programme inclut le groupe 'Rétroactifs' dans le style Jazz, prévu le **dimanche 21 septembre 2025**.\n\nNotez que cet événement est passé par rapport à la date d'aujourd'hui.",
+    "answer": "",
+    "contexts": [],
+    "category": "hors_périmètre"
+  },
+  {
+    "question": "Quel était le score de la finale de la coupe de france de Foot joué à Valence en Juillet 2025 ?",
+    "ground_truth": "D'après les documents fournis, je ne dispose d'aucune information concernant une finale de la Coupe de France de football qui se serait déroulée à Valence en juillet 2025.\n\nPar conséquent, je ne peux pas vous donner le score de cet événement.",
+    "answer": "",
+    "contexts": [],
+    "category": "hors_périmètre"
+  }
+]
