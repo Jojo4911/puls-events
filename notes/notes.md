@@ -75,7 +75,7 @@ Le vectorstore actuel créé avec FAISS ne supporte pas le filtrage des dates (c
 
 Ground_truth très détaillés, à voir si ce n'est pas bloquant au moment de l'implémentation RAGAS.
 
-## Évaluation manuelle
+## Évaluation manuelle (18/03/2026)
 
 Après avoir créé une évaluation manuelle, j'ai les résultats suivants :
 
@@ -100,3 +100,31 @@ Déjà on se rend compte que notre système RAG est très bon de manière global
 Quand on se penche sur les catégories où il est moins bon, on a :
 * **La catégorie date** : Effectivement, puisqu'il s'agit d'un outil FAISS pour réaliser les embeddings, nous avons pas de tri sur les dates en tant que tel. C'est une recherche uniquement sur le sens. C'est d'ailleurs pourquoi à la question sur la fête de la musique, le modèle ne s'est pas basé sur la date réelle de la fête de la musique en France, mais sur le mot fête de la musique qu'il a pu retrouver correctement. Quand j'ai posé des questions sur une date en particulier, le modèle a échoué à chaque fois, complètement ou partiellement.
 * **La catégorie type** : De manière générale, la catégorie type a été plutôt performante. La seule fois où j'ai évalué une réponse comme partielle, c'était qu'il me manquait un des trois événements que j'avais dans ma réponse vraie (ground truth). Cependant, cet événement pouvait être sujet à interprétation. En effet, la question relevait d'événements reliés aux voitures, et l'événement attendu était la visite d'une casse de voiture qui peut, selon les passionnés, n'être pas forcément intéressant.
+
+## Évaluation automatique avec Ragas (18/03/2026)
+
+Après avoir créé une évaluation automatique avec Ragas, j'ai les résultats suivants :
+
+### Résultats
+
+#### Résultats premier run
+
+--- Scores Moyens (sur tout le dataset) ---
+faithfulness         0.664980
+answer_relevancy     0.768140
+context_precision         NaN
+context_recall       0.625263
+
+#### Résultats second run
+
+--- Scores Moyens (sur tout le dataset) ---
+faithfulness 0.624249
+answer_relevancy 0.807217
+context_precision 1.000000
+context_recall 0.622571
+
+### Analyse
+Pour plusieurs questions, j'ai des métriques à la valeur NaN. La raison principale de tout ça, c'est que je dois avoir des timeouts dus à mon tiers payant de Google. Et je n'ai pas pu avoir toutes les requêtes de Ragas.
+Les moyennes sont calculées seulement sur des passes qui ont réussi, mais elles sont incomplètes.
+Une amélioration pourrait être de gérer ce problème de requêtes par minute.
+Le fichier n’a pas pu être enregistré car : AttributeError: 'NoneType' object has no attribute 'from_iterable'

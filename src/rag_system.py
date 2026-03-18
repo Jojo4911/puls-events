@@ -105,7 +105,10 @@ def format_datetime_fr(d: str) -> str:
         result: Texte de la date en français naturel.
     """
     
-    date_iso = datetime.fromisoformat(d).astimezone(tz=ZoneInfo("Europe/Paris"))
+    try:
+        date_iso = datetime.fromisoformat(d).astimezone(tz=ZoneInfo("Europe/Paris"))
+    except ValueError:
+        return "date non disponible"
     result = f"{DAYS_FR[date_iso.weekday()]} {date_iso.day} {MONTHS_FR[date_iso.month]} {date_iso.year} à {date_iso.hour}h{date_iso.minute:02d}"
     return result
 
