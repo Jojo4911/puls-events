@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 
 from langchain_core.documents import Document
 
-from src.rag_system import format_docs, RAGSystem
+from src.rag_system import format_docs, format_datetime_fr, RAGSystem
 
 
 # --- Fixtures ---
@@ -49,7 +49,7 @@ class TestFormatDocs:
         assert "[Document 1]" in result
         assert "Titre : Événement 1" in result
         assert "Lieu : Salle 1 — Valence" in result
-        assert "Dates : Le 10 mars 2026" in result
+        assert "Dates : Du mardi 10 mars 2026 à 0h00, au mardi 10 mars 2026 à 0h00" in result
         assert "Description de l'événement 1." in result
 
     def test_format_multiple_docs(self):
@@ -72,6 +72,26 @@ class TestFormatDocs:
     def test_format_empty_list(self):
         """format_docs() retourne une chaîne vide pour une liste vide."""
         assert format_docs([]) == ""
+
+
+
+# --- Tests format_datetime_fr ---
+
+
+class TestFormatDatetimeFr:
+    """Tests pour la fonction format_datetime_fr()"""
+
+    def test_date_regular(self):
+        date = format_datetime_fr("2025-09-20T08:23:00+00:00")
+        assert date == "samedi 20 septembre 2025 à 10h23"
+    
+    def test_date_minutes_double(self):
+        date = format_datetime_fr("2025-09-20T08:00:00+00:00")
+        assert date == "samedi 20 septembre 2025 à 10h00"
+    
+    def test_date_invalid(self):
+        date = format_datetime_fr("N/A")
+        assert date == "date non disponible"
 
 
 # --- Tests RAGSystem ---
@@ -158,7 +178,7 @@ class TestRAGSystem:
         source = result["sources"][0]
         assert source["title"] == "Événement 1"
         assert source["location_city"] == "Valence"
-        assert source["date_display"] == "Le 10 mars 2026"
+        assert source["date_display"] == "Du mardi 10 mars 2026 à 0h00, au mardi 10 mars 2026 à 0h00"
         assert source["url"] == "https://example.com/event-1"
 
     @patch("src.rag_system.get_llm")

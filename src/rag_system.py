@@ -105,7 +105,10 @@ def format_datetime_fr(d: str) -> str:
         result: Texte de la date en français naturel.
     """
     
-    date_iso = datetime.fromisoformat(d).astimezone(tz=ZoneInfo("Europe/Paris"))
+    try:
+        date_iso = datetime.fromisoformat(d).astimezone(tz=ZoneInfo("Europe/Paris"))
+    except ValueError:
+        return "date non disponible"
     result = f"{DAYS_FR[date_iso.weekday()]} {date_iso.day} {MONTHS_FR[date_iso.month]} {date_iso.year} à {date_iso.hour}h{date_iso.minute:02d}"
     return result
 
@@ -168,12 +171,15 @@ class RAGSystem:
         Returns:
             Dictionnaire avec :
                 - "answer": Réponse générée par le LLM (str)
-                - "source": Liste des documents utilisés comme contexte
+                - "sources": Liste des documents utilisés comme contexte
+                - "contexts": Liste de chaînes de page_content utilisés comme contexte (utile pour ragas)
         """
         # 1. Retrieval — récupère les documents pertinents
         logger.info("Question : '%s'", question[:80])
         docs = self.retriever.invoke(question)
         logger.info("Documents récupérés : %d", len(docs))
+
+        contexts = [doc.page_content for doc in docs]
 
         # 2. Augmentation — construction du prompt avec le contexte
         context = format_docs(docs)
@@ -209,6 +215,7 @@ class RAGSystem:
         return {
             "answer": answer,
             "sources": sources,
+            "contexts": contexts,
         }
     
 
