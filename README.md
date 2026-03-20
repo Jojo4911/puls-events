@@ -216,6 +216,31 @@ print(response.json())
 
 Le RAGSystem est initialisé une seule fois au démarrage du serveur via le mécanisme `lifespan` de FastAPI, évitant de recharger l'index FAISS à chaque requête.
 
+## Docker
+
+### Construction de l'image
+```bash
+docker build -t puls-events .
+```
+
+### Lancement du conteneur
+```bash
+docker run -p 8000:8000 --env-file .env puls-events
+```
+
+L'API est accessible à `http://localhost:8000/docs`.
+
+**Important :** le fichier `.env` doit respecter le format Docker (pas de guillemets autour des valeurs, pas de commentaires en fin de ligne).
+
+### Exemple de fichier `.env`
+```env
+GOOGLE_API_KEY=votre_clé_ici
+MISTRAL_API_KEY=votre_clé_ici
+OPENAGENDA_API_KEY=votre_clé_ici
+EMBEDDING_PROVIDER=google
+LLM_PROVIDER=google
+```
+
 ## Évaluation
 
 ### Jeu de test annoté
