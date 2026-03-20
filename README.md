@@ -45,7 +45,9 @@ puls-events/
 │   ├── test_dataset.json   # Jeu de test annoté (20 questions, 5 catégories)
 │   ├── evaluation_results.json  # Résultats de l'évaluation manuelle
 │   └── ragas_results.json  # Scores Ragas automatisés
-├── faiss_index/            # Index FAISS sauvegardé (généré, non versionné)
+├── faiss_index/            # Index FAISS sauvegardé
+├── Dockerfile              # Image Docker pour l'API
+├── .dockerignore           # Fichiers exclus du build Docker
 ├── docs/                   # Documentation technique et rapports
 ├── .env.example            # Template des variables d'environnement
 ├── .gitignore              # Fichiers et dossiers exclus du versionnement
@@ -193,12 +195,12 @@ Documentation Swagger interactive disponible à `http://127.0.0.1:8000/docs`.
 
 ### Endpoints
 
-| Méthode | Route      | Description                                      |
-|---------|------------|--------------------------------------------------|
-| GET     | `/`        | Redirection vers la documentation Swagger        |
-| GET     | `/health`  | État de santé de l'API                           |
-| POST    | `/ask`     | Poser une question au système RAG                |
-| POST    | `/rebuild` | Reconstruire la base de données vectorielle      |
+| Méthode | Route      | Description                                                                       |
+|---------|------------|-----------------------------------------------------------------------------------|
+| GET     | `/`        | Redirection vers la documentation Swagger                                         |
+| GET     | `/health`  | État de santé de l'API                                                            |
+| POST    | `/ask`     | Poser une question au système RAG                                                 |
+| POST    | `/rebuild` | Reconstruire la base vectorielle (`?limit=N` pour limiter le nombre d'événements) |
 
 ### Exemple d'utilisation
 
