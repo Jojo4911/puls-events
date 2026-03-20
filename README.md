@@ -20,14 +20,31 @@ puls-events/
 │   ├── ingestion.py        # Collecte et prétraitement des données Open Agenda
 │   ├── chunking.py         # Découpage des documents pour la vectorisation
 │   ├── vectorstore.py      # Embeddings, index FAISS (build/save/load/search)
-│   └── build_index.py      # Script de construction/reprise de l'index FAISS
-├── api/                    # Endpoints FastAPI
-├── tests/                  # Tests unitaires et scripts de validation
+│   ├── build_index.py      # Script de construction/reprise de l'index FAISS
+│   ├── llm.py              # Configuration LLM (get_llm(), extract_text())
+│   └── rag_system.py       # Chaîne RAG (RAGSystem, format_docs(), prompt)
+├── api/                    # API REST FastAPI
+│   ├── __init__.py         # Package Python
+│   ├── main.py             # Application FastAPI, endpoints, lifespan
+│   └── schemas.py          # Modèles Pydantic (AskRequest, AskResponse, SourceItem)
+├── scripts/                # Scripts utilitaires et d'évaluation
+│   ├── test_search.py      # Tests manuels de recherche sémantique
+│   ├── evaluate_manual.py  # Évaluation manuelle interactive du RAG
+│   └── evaluate_rag.py     # Évaluation automatisée avec Ragas
+├── tests/                  # Tests unitaires et d'intégration
 │   ├── test_imports.py     # Validation des imports clés
 │   ├── test_ingestion.py   # Tests du pipeline de collecte (33 tests)
 │   ├── test_chunking.py    # Tests du chunking
-│   └── test_vectorstore.py # Tests de l'index FAISS et des embeddings (14 tests)
-├── data/                   # Données collectées, traitées et chunkées
+│   ├── test_vectorstore.py # Tests de l'index FAISS et des embeddings (14 tests)
+│   ├── test_llm.py         # Tests de la configuration LLM
+│   ├── test_rag_system.py  # Tests de la chaîne RAG et du formatage
+│   └── test_api.py         # Tests de l'API FastAPI (mockés)
+├── data/                   # Données collectées, traitées et résultats
+│   ├── events_drome.csv    # Événements bruts nettoyés (1068 événements)
+│   ├── chunks_drome.json   # Chunks pour vectorisation (1403 chunks)
+│   ├── test_dataset.json   # Jeu de test annoté (20 questions, 5 catégories)
+│   ├── evaluation_results.json  # Résultats de l'évaluation manuelle
+│   └── ragas_results.json  # Scores Ragas automatisés
 ├── faiss_index/            # Index FAISS sauvegardé (généré, non versionné)
 ├── docs/                   # Documentation technique et rapports
 ├── .env.example            # Template des variables d'environnement
@@ -35,6 +52,7 @@ puls-events/
 ├── pyproject.toml          # Configuration du projet et dépendances (UV)
 ├── uv.lock                 # Verrouillage des versions exactes des dépendances
 ├── requirements.txt        # Dépendances (généré depuis uv.lock pour compatibilité pip)
+├── notes.md                # Justifications techniques, résultats, observations
 └── README.md
 ```
 
@@ -80,6 +98,7 @@ Variables à configurer dans `.env` :
 | `GOOGLE_API_KEY`      | Clé API Google Gemini                                |
 | `OPENAGENDA_API_KEY`  | Clé API Open Agenda                                  |
 | `EMBEDDING_PROVIDER`  | Provider d'embeddings : `mistral` ou `google`        |
+| `LLM_PROVIDER`        | Provider LLM : `mistral` ou `google`                 |
 
 ### Vérification de l'environnement
 
@@ -147,7 +166,92 @@ Ce pipeline :
 
 L'architecture supporte le switch entre providers d'embeddings via la variable `EMBEDDING_PROVIDER`. Pour le provider Google, les embeddings sont optimisés par type de tâche : `RETRIEVAL_DOCUMENT` à l'indexation et `RETRIEVAL_QUERY` à la recherche, ce qui améliore la pertinence des résultats.
 
-**Note sur le choix du modèle d'embedding :** le modèle cible est Mistral (`mistral-embed`), conformément aux exigences du projet. En raison d'un problème d'accès à l'API Mistral (ticket de support ouvert, non résolu au moment du développement), le modèle Google `gemini-embedding-001` est utilisé en fallback. L'architecture permet de switcher entre les deux providers sans modification de code.
+**Note sur le choix du modèle d'embedding :** le modèle cible est Mistral (`mistral-embed`), conformément aux exigences du projet. En raison d'un problème d'accès à l'API Mistral (ticket de support ouvert, non résolu au moment du développement), le modèle Google `gemini-embedding-2-preview` (768 dimensions) est utilisé en fallback. L'architecture permet de switcher entre les deux providers sans modification de code.
+
+### 4. Système RAG
+
+Le module `src/rag_system.py` orchestre la chaîne RAG complète via la classe `RAGSystem` :
+
+1. **Charge** l'index FAISS et initialise le retriever (k=10 documents)
+2. **Récupère** les documents pertinents via recherche sémantique
+3. **Formate** les résultats avec métadonnées (titre, lieu, dates en français via `format_datetime_fr()`)
+4. **Génère** une réponse contextualisée via le LLM (configuré dans `src/llm.py`)
+
+Le prompt RAG injecte la date du jour (`{today_date}`) pour permettre au LLM de distinguer les événements passés des événements à venir, et inclut des règles pour suggérer des alternatives quand aucun résultat exact n'est trouvé.
+
+La configuration LLM supporte le switch entre providers via `LLM_PROVIDER` dans `.env`. Le module `src/llm.py` expose `get_llm()` et `get_embeddings()` avec gestion transparente des différences de format de réponse entre providers.
+
+## API REST
+
+L'API expose le système RAG via FastAPI :
+
+```bash
+uv run uvicorn api.main:app --reload
+```
+
+Documentation Swagger interactive disponible à `http://127.0.0.1:8000/docs`.
+
+### Endpoints
+
+| Méthode | Route      | Description                                      |
+|---------|------------|--------------------------------------------------|
+| GET     | `/`        | Redirection vers la documentation Swagger        |
+| GET     | `/health`  | État de santé de l'API                           |
+| POST    | `/ask`     | Poser une question au système RAG                |
+| POST    | `/rebuild` | Reconstruire la base de données vectorielle      |
+
+### Exemple d'utilisation
+
+```bash
+# Via Swagger UI (recommandé)
+# Ouvrir http://127.0.0.1:8000/docs dans le navigateur
+
+# Via Python
+import requests
+response = requests.post("http://127.0.0.1:8000/ask", json={"question": "Quels événements à Valence ?"})
+print(response.json())
+```
+
+Le RAGSystem est initialisé une seule fois au démarrage du serveur via le mécanisme `lifespan` de FastAPI, évitant de recharger l'index FAISS à chaque requête.
+
+## Évaluation
+
+### Jeu de test annoté
+
+20 paires question/réponse de référence réparties en 5 catégories : lieu (3), type (4), date (4), croisé (4), hors_périmètre (5). Les ground truths sont vérifiées contre les données source (`events_drome.csv`).
+
+### Évaluation manuelle
+
+```bash
+uv run python scripts/evaluate_manual.py
+```
+
+Classification interactive des réponses (correcte / partiellement correcte / incorrecte) avec calcul des scores par catégorie.
+
+| Catégorie       | Score  |
+|-----------------|--------|
+| lieu            | 100%   |
+| croisé          | 100%   |
+| hors_périmètre  | 100%   |
+| type            | 87.5%  |
+| date            | 37.5%  |
+
+**Limitation identifiée :** la recherche purement sémantique FAISS ne filtre pas par date. Les questions ciblant une date précise échouent car le retriever retourne des documents sémantiquement proches mais aux mauvaises dates. C'est une limitation structurelle documentée, avec des pistes d'amélioration identifiées (recherche hybride, filtrage post-retrieval, migration vers un vector store avec filtrage de métadonnées).
+
+### Évaluation automatisée (Ragas)
+
+```bash
+uv run python scripts/evaluate_rag.py
+```
+
+| Métrique           | Score  |
+|--------------------|--------|
+| faithfulness       | 0.624  |
+| answer_relevancy   | 0.807  |
+| context_precision  | 1.000  |
+| context_recall     | 0.623  |
+
+*Note : résultats partiels en raison des limites de taux du tier gratuit Gemini (15 RPM). `context_precision` non calculé (TimeoutError).*
 
 ### Tests
 
