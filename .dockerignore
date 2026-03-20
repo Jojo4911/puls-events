@@ -1,0 +1,24 @@
+# Dépendances (réinstallées dans l'image)
+__pycache__/
+
+# Git
+.git/
+.gitignore
+
+# Fichiers d'installation (résolu par requirements.txt)
+.venv/
+.toml
+.lock
+
+# Data (fichiers déjà enregistrés lors d'une construction de la base de données vectorielle)
+# S’il est absent, le dossier sera recréé automatiquement grâce à save_events() de ingestion.py
+data/
+
+# Tests
+tests/
+
+# Notes
+notes/
+
+# Secrets
+.env
