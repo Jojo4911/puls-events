@@ -13,6 +13,8 @@ __pycache__/
 # Data (fichiers déjà enregistrés lors d'une construction de la base de données vectorielle)
 # S’il est absent, le dossier sera recréé automatiquement grâce à save_events() de ingestion.py
 data/
+# Exception pour evaluation_results.json, car on en a besoin dans evaluate_rag.py (très léger)
+!data/evaluation_results.json
 
 # Tests
 tests/

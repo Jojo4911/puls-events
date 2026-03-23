@@ -230,6 +230,15 @@ docker run -p 8000:8000 --env-file .env puls-events
 
 L'API est accessible à `http://localhost:8000/docs`.
 
+### Évaluation dans le conteneur
+
+Le script d'évaluation Ragas peut être lancé directement dans le conteneur Docker :
+```bash
+docker exec <CONTAINER_ID> python -m scripts.evaluate_rag
+```
+
+Note : les résultats complets nécessitent un quota suffisant sur l'API d'embeddings et de génération (15 RPM sur le tier gratuit Gemini).
+
 **Important :** le fichier `.env` doit respecter le format Docker (pas de guillemets autour des valeurs, pas de commentaires en fin de ligne).
 
 ### Exemple de fichier `.env`
@@ -278,7 +287,7 @@ uv run python scripts/evaluate_rag.py
 | context_precision  | 1.000  |
 | context_recall     | 0.623  |
 
-*Note : résultats partiels en raison des limites de taux du tier gratuit Gemini (15 RPM). `context_precision` non calculé (TimeoutError).*
+*Note : résultats obtenus en deux lancements successifs en raison des limites de taux du tier gratuit Gemini (15 RPM). Certaines métriques ont nécessité un second lancement pour être calculées.*
 
 ### Tests
 
