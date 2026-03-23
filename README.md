@@ -11,6 +11,50 @@ Le système repose sur une architecture **RAG (Retrieval-Augmented Generation)**
 
 L'objectif est de permettre à un utilisateur de poser une question en langage naturel (ex : *"Quels concerts ont lieu dans la Drôme ce week-end ?"*) et d'obtenir des recommandations pertinentes basées sur les données réelles d'événements.
 
+## Architecture
+
+Le projet a une architecture qui peut se représenter selon ce schéma :
+
+```mermaid
+flowchart LR
+    %% Composants de base
+    User(((👤 Utilisateur)))
+    API[⚡FastAPI<br>api/main.py]
+    RAG(🎛️ RAGSystem<br>Orchestrateur)
+    LLM{{🧠 Modèle LLM}}
+    FAISS[(📚 Index Vectoriel FAISS)]
+    OpenAgenda((🗓️ API<br>OpenAgenda))
+
+    %% Pipeline d'Ingestion
+    subgraph DataIngestion [Pipeline de construction de la base de données vectorielle]
+        Ingestion(<b>ingestion.py</b><br>Filtres Drôme, moins d'1 an<br>Nettoyage et CSV/JSON)
+        Chunking(<b>chunking.py</b><br>Découpage en chunks)
+        Vectorstore(<b>vectorstore.py</b><br>Sélection modèle Google/Mistral<br>Sauvegarde Index)
+    end
+
+    %% 1. FLUX D'INGESTION (Préparation en amont)
+    OpenAgenda --> Ingestion
+    Ingestion --> Chunking
+    Chunking --> Vectorstore
+    Vectorstore --> FAISS
+
+    %% 2. FLUX UTILISATEUR (Inférence temps réel)
+    User -->|1. Requête POST| API
+    API -->|2. Transmet question| RAG
+    RAG -->|3a. Demande contexte| FAISS
+    FAISS -.->|3b. k documents| RAG
+    RAG -->|4. Prompt augmenté| LLM
+    LLM -.->|5. Génère réponse| RAG
+    RAG -.->|6. Réponse + Sources| API
+    API -.->|7. Retour Utilisateur| User
+
+    %% Styles pour l'esthétique
+    classDef user fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef api fill:#e1f5fe,stroke
+```
+
+Un premier Pipeline construit la base de données vectorielle (FAISS), et ensuite il y a le Pipeline d'utilisation du RAG.
+
 ## Structure du projet
 
 ```
