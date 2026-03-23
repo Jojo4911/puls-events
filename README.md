@@ -45,7 +45,9 @@ puls-events/
 │   ├── test_dataset.json   # Jeu de test annoté (20 questions, 5 catégories)
 │   ├── evaluation_results.json  # Résultats de l'évaluation manuelle
 │   └── ragas_results.json  # Scores Ragas automatisés
-├── faiss_index/            # Index FAISS sauvegardé (généré, non versionné)
+├── faiss_index/            # Index FAISS sauvegardé
+├── Dockerfile              # Image Docker pour l'API
+├── .dockerignore           # Fichiers exclus du build Docker
 ├── docs/                   # Documentation technique et rapports
 ├── .env.example            # Template des variables d'environnement
 ├── .gitignore              # Fichiers et dossiers exclus du versionnement
@@ -193,12 +195,12 @@ Documentation Swagger interactive disponible à `http://127.0.0.1:8000/docs`.
 
 ### Endpoints
 
-| Méthode | Route      | Description                                      |
-|---------|------------|--------------------------------------------------|
-| GET     | `/`        | Redirection vers la documentation Swagger        |
-| GET     | `/health`  | État de santé de l'API                           |
-| POST    | `/ask`     | Poser une question au système RAG                |
-| POST    | `/rebuild` | Reconstruire la base de données vectorielle      |
+| Méthode | Route      | Description                                                                       |
+|---------|------------|-----------------------------------------------------------------------------------|
+| GET     | `/`        | Redirection vers la documentation Swagger                                         |
+| GET     | `/health`  | État de santé de l'API                                                            |
+| POST    | `/ask`     | Poser une question au système RAG                                                 |
+| POST    | `/rebuild` | Reconstruire la base vectorielle (`?limit=N` pour limiter le nombre d'événements) |
 
 ### Exemple d'utilisation
 
@@ -213,6 +215,40 @@ print(response.json())
 ```
 
 Le RAGSystem est initialisé une seule fois au démarrage du serveur via le mécanisme `lifespan` de FastAPI, évitant de recharger l'index FAISS à chaque requête.
+
+## Docker
+
+### Construction de l'image
+```bash
+docker build -t puls-events .
+```
+
+### Lancement du conteneur
+```bash
+docker run -p 8000:8000 --env-file .env puls-events
+```
+
+L'API est accessible à `http://localhost:8000/docs`.
+
+### Évaluation dans le conteneur
+
+Le script d'évaluation Ragas peut être lancé directement dans le conteneur Docker :
+```bash
+docker exec <CONTAINER_ID> python -m scripts.evaluate_rag
+```
+
+Note : les résultats complets nécessitent un quota suffisant sur l'API d'embeddings et de génération (15 RPM sur le tier gratuit Gemini).
+
+**Important :** le fichier `.env` doit respecter le format Docker (pas de guillemets autour des valeurs, pas de commentaires en fin de ligne).
+
+### Exemple de fichier `.env`
+```env
+GOOGLE_API_KEY=votre_clé_ici
+MISTRAL_API_KEY=votre_clé_ici
+OPENAGENDA_API_KEY=votre_clé_ici
+EMBEDDING_PROVIDER=google
+LLM_PROVIDER=google
+```
 
 ## Évaluation
 
@@ -251,7 +287,7 @@ uv run python scripts/evaluate_rag.py
 | context_precision  | 1.000  |
 | context_recall     | 0.623  |
 
-*Note : résultats partiels en raison des limites de taux du tier gratuit Gemini (15 RPM). `context_precision` non calculé (TimeoutError).*
+*Note : résultats obtenus en deux lancements successifs en raison des limites de taux du tier gratuit Gemini (15 RPM). Certaines métriques ont nécessité un second lancement pour être calculées.*
 
 ### Tests
 

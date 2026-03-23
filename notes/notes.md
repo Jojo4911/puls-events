@@ -128,3 +128,99 @@ Pour plusieurs questions, j'ai des métriques à la valeur NaN. La raison princi
 Les moyennes sont calculées seulement sur des passes qui ont réussi, mais elles sont incomplètes.
 Une amélioration pourrait être de gérer ce problème de requêtes par minute.
 Le fichier n’a pas pu être enregistré car : AttributeError: 'NoneType' object has no attribute 'from_iterable'
+
+## Docker (20/03/2026)
+
+Création d'un Dockerfile, d'un .dockerignore, et ensuite adaptation des fichiers d'environnement pour que la lecture des clés soit correcte.
+
+### Résultats
+
+J'ai testé deux choses :
+* `/health` depuis la ligne de commande avec une bonne réponse.
+* `/ask` depuis le navigateur avec le swagger, j'ai posé une question classique et j'ai enfin eu une réponse attendue avec un code 200.
+
+### Points d'attention
+
+Les points d'attention font écho à des difficultés rencontrées et résolues :
+1. Docker Desktop non lancé → le daemon doit tourner
+2. Espaces autour du = dans le .env → Docker est strict
+3. Guillemets autour des valeurs → python-dotenv les retire, Docker non
+4. Commentaires en fin de ligne → python-dotenv les supporte, Docker non
+
+### Logs de rebuild depuis le swagger (Docker)
+
+2026-03-20 13:40:12,501 - INFO - Début de la collecte — département: Drôme, historique: 365 jours
+2026-03-20 13:40:13,760 - INFO - Récupérés: 100 / 1068 événements
+2026-03-20 13:40:14,148 - INFO - Récupérés: 200 / 1068 événements
+2026-03-20 13:40:14,564 - INFO - Récupérés: 300 / 1068 événements
+2026-03-20 13:40:14,948 - INFO - Récupérés: 400 / 1068 événements
+2026-03-20 13:40:15,338 - INFO - Récupérés: 500 / 1068 événements
+2026-03-20 13:40:15,756 - INFO - Récupérés: 600 / 1068 événements
+2026-03-20 13:40:16,686 - INFO - Récupérés: 700 / 1068 événements
+2026-03-20 13:40:17,063 - INFO - Récupérés: 800 / 1068 événements
+2026-03-20 13:40:17,483 - INFO - Récupérés: 900 / 1068 événements
+2026-03-20 13:40:17,886 - INFO - Récupérés: 1000 / 1068 événements
+2026-03-20 13:40:18,330 - INFO - Récupérés: 1068 / 1068 événements
+2026-03-20 13:40:18,330 - INFO - Collecte terminée: 1068 évènements récupérés
+2026-03-20 13:40:18,331 - INFO - Nettoyage de 1068 événements...
+2026-03-20 13:40:18,426 - INFO - Nettoyage terminé: 1066 événements retenus
+2026-03-20 13:40:18,496 - INFO - Données sauvegardées: /app/data/events_drome.json et /app/data/events_drome.csv
+2026-03-20 13:40:18,497 - INFO - Chargement des données depuis /app/data/events_drome.csv
+2026-03-20 13:40:18,559 - INFO - Conversion : 1066 événements -> 1066 documents LangChain
+2026-03-20 13:40:18,653 - INFO - Chunking terminé : 1066 documents -> 1397 chunks (chunk_size=1000, overlap=150).
+2026-03-20 13:40:18,654 - INFO -  - 909 documents non découpés (< 1000 car.)
+2026-03-20 13:40:18,654 - INFO -  - 157 documents découpés en plusieurs chunks.
+2026-03-20 13:40:18,654 - INFO - Embedding provider : Google (gemini-embedding-2-preview, task_type=RETRIEVAL_DOCUMENT)
+2026-03-20 13:40:18,670 - INFO - Construction de l'index FAISS : 1397 chunks en 14 batchs (taille=100, délai=65s, durée estimée=15.2 min)...
+2026-03-20 13:40:20,203 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:40:21,698 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:40:21,775 - INFO - Batch 1/14 traité (100 chunks, total=100/1397).
+2026-03-20 13:40:21,954 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:40:21,955 - WARNING - Rate limit atteint (batch 2, tentative 1/8).Attente de 10s...
+2026-03-20 13:40:32,124 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:40:32,125 - WARNING - Rate limit atteint (batch 2, tentative 2/8).Attente de 20s...
+2026-03-20 13:40:52,456 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:40:52,457 - WARNING - Rate limit atteint (batch 2, tentative 3/8).Attente de 40s...
+2026-03-20 13:41:34,169 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:41:35,719 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:41:35,752 - INFO - Batch 2/14 traité (100 chunks, total=200/1397).
+2026-03-20 13:41:35,952 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:41:35,952 - WARNING - Rate limit atteint (batch 3, tentative 1/8).Attente de 10s...
+2026-03-20 13:41:46,149 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:41:46,150 - WARNING - Rate limit atteint (batch 3, tentative 2/8).Attente de 20s...
+2026-03-20 13:42:06,333 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:42:06,333 - WARNING - Rate limit atteint (batch 3, tentative 3/8).Attente de 40s...
+2026-03-20 13:42:48,016 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:42:49,503 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:42:49,544 - INFO - Batch 3/14 traité (100 chunks, total=300/1397).
+2026-03-20 13:42:49,720 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:42:49,720 - WARNING - Rate limit atteint (batch 4, tentative 1/8).Attente de 10s...
+2026-03-20 13:42:59,919 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:42:59,919 - WARNING - Rate limit atteint (batch 4, tentative 2/8).Attente de 20s...
+2026-03-20 13:43:21,646 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:43:23,167 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:43:23,236 - INFO - Batch 4/14 traité (100 chunks, total=400/1397).
+2026-03-20 13:43:23,441 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:43:23,441 - WARNING - Rate limit atteint (batch 5, tentative 1/8).Attente de 10s...
+2026-03-20 13:43:33,607 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:43:33,608 - WARNING - Rate limit atteint (batch 5, tentative 2/8).Attente de 20s...
+2026-03-20 13:43:53,777 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:43:53,779 - WARNING - Rate limit atteint (batch 5, tentative 3/8).Attente de 40s...
+2026-03-20 13:44:35,431 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:44:36,915 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:44:37,912 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 200 OK"
+2026-03-20 13:44:37,924 - INFO - Batch 5/14 traité (100 chunks, total=500/1397).
+2026-03-20 13:44:38,096 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:44:38,097 - WARNING - Rate limit atteint (batch 6, tentative 1/8).Attente de 10s...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+2026-03-20 13:44:48,317 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:batchEmbedContents "HTTP/1.1 429 Too Many Requests"
+2026-03-20 13:44:48,321 - WARNING - Rate limit atteint (batch 6, tentative 2/8).Attente de 20s...
+
+### Conclusions
+deux points critiques validés dans le conteneur :
+
+Les chemins fonctionnent : /app/data/ est créé et les fichiers y sont écrits correctement
+Les permissions sont OK : ton utilisateur user non-root peut écrire partout où il faut
+
+Le pipeline Docker fonctionne de bout en bout, c'est prouvé.

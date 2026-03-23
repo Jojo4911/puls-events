@@ -55,7 +55,7 @@ def build_where_clause(department: str, days_history: int) -> str:
     return f'location_department="{department}" AND lastdate_begin>="{date_limit}"'
 
 
-def fetch_events(department: str = DEPARTEMENT, days_history: int = DAYS_HISTORY) -> list[dict]:
+def fetch_events(department: str = DEPARTEMENT, days_history: int = DAYS_HISTORY, limit: int | None = None) -> list[dict]:
     """
     Récupère tous les évènements depuis l'API avec pagination.
 
@@ -90,6 +90,10 @@ def fetch_events(department: str = DEPARTEMENT, days_history: int = DAYS_HISTORY
             break
 
         all_records.extend(results)
+
+        if (limit is not None) and (len(all_records) >= limit):
+            break
+
         offset += PAGE_SIZE
 
         total = data.get("total_count", "?")
@@ -100,6 +104,7 @@ def fetch_events(department: str = DEPARTEMENT, days_history: int = DAYS_HISTORY
             break
 
     logger.info("Collecte terminée: %d évènements récupérés", len(all_records))
+    all_records = all_records[:limit]
     return all_records
 
 

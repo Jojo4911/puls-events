@@ -45,13 +45,13 @@ def ask_question(body: AskRequest, request: Request):
         raise HTTPException(status_code=500, detail=f"Erreur du système RAG : {e}")
 
 @app.post("/rebuild", summary="Reconstruit toute la base de données vectorielle")
-def rebuild_vector_database(request: Request):
+def rebuild_vector_database(request: Request, limit: int | None = None):
     log_dict = {"message": "Échec de la reconstruction de la base de données vectorielle"}
     try:
         # === I. Ingestion ===
         # 1. Récupère tous les évènements depuis l'API.
         current_step = "fetch_events() de ingestion.py"
-        raw_events = fetch_events()
+        raw_events = fetch_events(limit=limit)
         log_dict["fetch"] = f"Ingestion : {len(raw_events)} événements récupérés"
         # 2. Nettoie et structure les évènements bruts en DataFrame.
         current_step = "clean_events() de ingestion.py"
