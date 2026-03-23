@@ -93,6 +93,8 @@ puls-events/
 ├── Dockerfile              # Image Docker pour l'API
 ├── .dockerignore           # Fichiers exclus du build Docker
 ├── docs/                   # Documentation technique et rapports
+│   ├── rapport_technique_puls_events.docx  # Rapport technique (Word)
+│   └── rapport_technique_puls_events.pdf   # Rapport technique (PDF)
 ├── .env.example            # Template des variables d'environnement
 ├── .gitignore              # Fichiers et dossiers exclus du versionnement
 ├── pyproject.toml          # Configuration du projet et dépendances (UV)
@@ -338,6 +340,10 @@ uv run python scripts/evaluate_rag.py
 ```bash
 uv run pytest tests/ -v
 ```
+
+## Documentation
+
+Le rapport technique complet est disponible dans le dossier `docs/` au format [PDF](docs/rapport_technique_puls_events.pdf) et [Word](docs/rapport_technique_puls_events.docx). Il documente l'architecture, les choix technologiques, les résultats d'évaluation et les pistes d'amélioration.
 
 ## Technologies
 
