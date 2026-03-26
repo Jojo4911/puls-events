@@ -57,6 +57,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"{test.__name__} FAILED: {e}")
             failed += 1
-
-if __name__ == "__main__":
     print(f"\nResultat: {passed} passed, {failed} failed")

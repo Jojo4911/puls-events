@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 # --- Configuration ---
 
-FAIS_INDEX_DIR = Path(__file__).resolve().parent.parent / "faiss_index"
+FAISS_INDEX_DIR = Path(__file__).resolve().parent.parent / "faiss_index"
 EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "google") # "mistral" ou "google"
 
 
@@ -167,7 +167,7 @@ def build_index(
         else:
             # Sauvegarde d'urgence avant de planter
             if vectorstore is not None:
-                emergency_path = save_index(vectorstore, FAIS_INDEX_DIR / "partial")
+                emergency_path = save_index(vectorstore, FAISS_INDEX_DIR / "partial")
                 logger.error(
                     "Sauvegarde d'urgence effectuée dans %s (%d vecteurs).",
                     emergency_path, vectorstore.index.ntotal,
@@ -265,7 +265,7 @@ def save_index(vectorstore: FAISS, path: Path | str | None = None) -> Path:
         Chemin du répertoire de sauvegarde.
     """
     if path is None:
-        path = FAIS_INDEX_DIR
+        path = FAISS_INDEX_DIR
     
     path = Path(path)
     path.mkdir(parents=True, exist_ok=True)
@@ -290,7 +290,7 @@ def load_index(path: Path | str | None = None) -> FAISS:
         Index FAISS prêt pour la recherche.
     """
     if path is None:
-        path = FAIS_INDEX_DIR
+        path = FAISS_INDEX_DIR
     
     path = Path(path)
 
