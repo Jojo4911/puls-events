@@ -50,7 +50,18 @@ flowchart LR
 
     %% Styles pour l'esthétique
     classDef user fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef api fill:#e1f5fe,stroke
+    classDef api fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef core fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef db fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+    classDef llm fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef external fill:#ffe0b2,stroke:#ef6c00,stroke-width:2px;
+
+    class User user;
+    class API api;
+    class RAG,Ingestion,Chunking,Vectorstore core;
+    class FAISS db;
+    class LLM llm;
+    class OpenAgenda external;
 ```
 
 Un premier Pipeline construit la base de données vectorielle (FAISS), et ensuite il y a le Pipeline d'utilisation du RAG.

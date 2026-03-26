@@ -31,7 +31,7 @@ def main():
             meta = doc.metadata
             print(f"\n --- Résultats {i}---")
             print(f"  Titre : {meta.get('title', 'N/A')}")
-            print(f"  Lieu  : {meta.get('location_naem', 'N/A')} — {meta.get('location_city', 'N/A')}")
+            print(f"  Lieu  : {meta.get('location_name', 'N/A')} — {meta.get('location_city', 'N/A')}")
             print(f"  Dates : {meta.get('first_date', '?')} → {meta.get('last_date', '?')}")
             print(f" Affichage dates : {meta.get('date_display', 'N/A')}")
             print(f"  Texte : {doc.page_content[:150]}...")
