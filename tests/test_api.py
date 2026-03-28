@@ -38,6 +38,8 @@ def client():
             ],
             "contexts": ["event1", "event2", "event3"],
         }
+        mock_rag.return_value.vectorstore.index.ntotal = 1403
+        mock_rag.return_value.vectorstore.index.d = 768
         with TestClient(app) as c:
             yield c
 
@@ -54,6 +56,14 @@ def test_read_root(client):
     response_read_root = client.get("/", follow_redirects=False)
     assert response_read_root.status_code == 307
     assert response_read_root.headers["location"] == "/docs"
+
+
+# ---Metadata Endpoint---
+def test_metadata(client):
+    response_metadata = client.get("/metadata")
+    assert response_metadata.status_code == 200
+    assert response_metadata.json().keys() == {'number_chunks', 'vector_dimension', 'embedding_provider', 'llm_provider', 'last_index_update', 'api_version'}
+
 
 # ---Ask Endpoint---
 # Testing endpoint with a valid question

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -15,3 +16,11 @@ class AskResponse(BaseModel):
     answer: str
     sources: list[SourceItem]
     contexts: list[str]
+
+class MetadataResponse(BaseModel):
+    number_chunks: int
+    vector_dimension: int
+    embedding_provider: str
+    llm_provider: str
+    last_index_update: datetime | None = None
+    api_version: str
