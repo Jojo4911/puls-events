@@ -4,8 +4,11 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import RedirectResponse
+import os
+from pathlib import Path
+from datetime import datetime
 
-from api.schemas import AskRequest, AskResponse
+from api.schemas import AskRequest, AskResponse, MetadataResponse
 from src.rag_system import RAGSystem
 from src.ingestion import fetch_events, clean_events, save_events
 from src.chunking import load_and_chunk
@@ -34,6 +37,25 @@ def read_root():
 @app.get("/health", summary="Renvoie l'état de santé de l'API")
 def health_check():
     return {"status": "ok", "RAG system": "loaded"}
+
+@app.get("/metadata", summary="Informations techniques sur l'index et les providers actifs")
+def metadata(request: Request):
+    number_chunks = request.app.state.rag_system.vectorstore.index.ntotal
+    vector_dimension = request.app.state.rag_system.vectorstore.index.d
+    index_path = Path(__file__).resolve().parent.parent / "faiss_index" / "index.faiss"
+    try:
+        last_index_update = datetime.fromtimestamp(os.path.getmtime(index_path))
+    except FileNotFoundError:
+        last_index_update = None
+    result = {
+        "number_chunks": number_chunks,
+        "vector_dimension": vector_dimension,
+        "embedding_provider": os.getenv("EMBEDDING_PROVIDER"),
+        "llm_provider": os.getenv("LLM_PROVIDER"),
+        "last_index_update": last_index_update,
+        "api_version": request.app.version,
+    }
+    return MetadataResponse(**result)
 
 @app.post("/ask", summary="Permet de poser une question au RAG")
 def ask_question(body: AskRequest, request: Request):

@@ -21,7 +21,7 @@ from src.vectorstore import (
     save_index,
     load_index,
     search,
-    FAIS_INDEX_DIR,
+    FAISS_INDEX_DIR,
 )
 
 

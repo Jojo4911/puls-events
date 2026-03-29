@@ -256,6 +256,7 @@ Documentation Swagger interactive disponible à `http://127.0.0.1:8000/docs`.
 |---------|------------|-----------------------------------------------------------------------------------|
 | GET     | `/`        | Redirection vers la documentation Swagger                                         |
 | GET     | `/health`  | État de santé de l'API                                                            |
+| GET     | `/metadata`  | Informations techniques sur l'index et les providers actifs                                              |
 | POST    | `/ask`     | Poser une question au système RAG                                                 |
 | POST    | `/rebuild` | Reconstruire la base vectorielle (`?limit=N` pour limiter le nombre d'événements) |
 
